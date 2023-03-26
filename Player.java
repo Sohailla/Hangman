@@ -36,7 +36,4 @@ public class Player {
     public void setScorehastory(int scorehastory) {
         Scorehastory = scorehastory;
     }
-
-
-    
 }

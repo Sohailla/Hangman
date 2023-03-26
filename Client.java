@@ -3,109 +3,128 @@ import java.net.*;
 import java.util.*;
 
 class Client {
-   public  static String login(DataInputStream otherreadSource,  DataOutputStream otherwriteSource){
+  public static void main(String[] args) {
+    Scanner scan = new Scanner(System.in);
+    
     try {
-    String str= otherreadSource.readUTF();
-    System.out.println(str);
-    Scanner scan1 = new Scanner(System.in);
-      String ch1 = scan1.nextLine();
-    otherwriteSource.writeUTF(ch1);
-    str = otherreadSource.readUTF();
-    System.out.println(str);
-    /// b3d kida hwa ely mstani mani 2ktab 7aga
-    otherwriteSource.writeUTF("123");
-    // hyb3tol elrad 
-    str = otherreadSource.readUTF();
-    System.out.println(str);
-    return str;
-  }catch(IOException E){
-    return "false";
+      Socket socket = new Socket("127.0.0.1", 9999);
+      DataInputStream dis = new DataInputStream(socket.getInputStream());
+      DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
+
+      // object of scanner class
+      Scanner sc = new Scanner(System.in);
+      String line = null;
+
+      while (!"exit".equalsIgnoreCase(line)) {
+
+        String str = dis.readUTF();
+        System.out.println(str);
+        
+        String option = scan.nextLine();
+        dos.writeUTF(option);
+
+
+        switch(option) {
+          // TODO: Handle Login case: 
+          case "1": {
+            if (login(dis, dos).equals("true")) {
+              str = dis.readUTF();
+              dos.writeUTF("1");
+              
+              int countInt = 0;
+              boolean bool = true;
+              int cont1 = 0;
+              
+              while (countInt < 6 && bool) {
+                System.out.println(dis.readUTF());
+                System.out.println(dis.readUTF());
+                String g = sc.nextLine();
+                dos.writeUTF(g);
+                
+                String count = dis.readUTF();
+                String bloo = dis.readUTF();
+                
+                countInt = Integer.parseInt(count);
+                bool = Boolean.parseBoolean(bloo);
+              }
+              System.out.println(dis.readUTF());
+            }
+          } 
+          break; 
+
+          // TODO: Handle Register Function
+          case "2" : {
+            Scanner cin = new Scanner(System.in);
+            
+            System.out.println(" an bsagal u ");
+            str = dis.readUTF();
+            
+            System.out.println(str);
+            String rr = cin.nextLine();
+            
+            /// b3d kida hwa ely mstani mani 2ktab 7aga
+            System.out.println(" an bsagal p ");
+            dos.writeUTF(rr);
+
+            str = dis.readUTF();
+            System.out.println(str);
+            /// b3d kida hwa ely mstani mani 2ktab 7aga
+            rr = cin.nextLine();
+            dos.writeUTF(rr);
+            str = dis.readUTF();
+            System.out.println(str);
+            
+            /// b3d kida hwa ely mstani mani 2ktab 7aga
+            rr = cin.nextLine();
+            dos.writeUTF("rr");
+
+            str = dis.readUTF();
+            System.out.println(str);
+          }
+          break;
+        }
+        
+        
+        if (option.equals("2")) {
+          
+
+        }
+      }
+
+      // closing the scanner object
+      sc.close();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
   }
-   } 
-  
-	public static void main(String[] args)
-	{
-		// establish a connection by providing host and port
-		// number
-		try (Socket socket = new Socket("localhost", 6666)) {
-			
-            DataInputStream otherreadSource = new DataInputStream(socket.getInputStream());
-            DataOutputStream otherwriteSource = new DataOutputStream(socket.getOutputStream());
 
-			// object of scanner class
-			Scanner sc = new Scanner(System.in);
-			String line = null;
+  public static String login(DataInputStream dis, DataOutputStream dos) {
+    Scanner cin = new Scanner(System.in);
+    
+    try {
+      String str = dis.readUTF();
+      System.out.println(str);
 
+      String option_1 = cin.nextLine();
+      dos.writeUTF(option_1);
 
-			while (!"exit".equalsIgnoreCase(line)) {	
+      str = dis.readUTF();
+      System.out.println(str);
 
-                String str = "";
-                str= otherreadSource.readUTF();
-                System.out.println(str);
-                Scanner scan = new Scanner(System.in);
-                  String ch = scan.nextLine();
-                otherwriteSource.writeUTF(ch);
-/// if(ch1.equals("1")){
-  if(ch.equals("1")){
-               
-                if(login( otherreadSource,otherwriteSource).equals("true"))
-                {
-                    // 2wal 7aga an b2ra mno el menu bt3 el 3ba
-                     
-                    str = otherreadSource.readUTF();
-                     
-                  
-                    otherwriteSource.writeUTF( "1" );
-                    int cont =0;
-                    boolean blo= true;
-                    int cont1 =0;
-                      while( cont < 6 &&   blo) {
-                            System.out.println( otherreadSource.readUTF());
-                            System.out.println( otherreadSource.readUTF());
-                            String g = sc.nextLine();
-                            otherwriteSource.writeUTF(g);
-                            String count =otherreadSource.readUTF();
-                            String bloo =otherreadSource.readUTF();
-                            cont = Integer.parseInt(count);
-                            blo= Boolean.parseBoolean(bloo);
-                      }
-                      System.out.println( otherreadSource.readUTF());
-                    }
-                  }
-                  else if(ch.equals("2")){
-                    Scanner r = new Scanner(System.in);
-                    System.out.println(" an bsagal u ");
-                    str = otherreadSource.readUTF();
-                    System.out.println(str);
-                    String rr = r.nextLine();
-                    /// b3d kida hwa ely mstani mani 2ktab 7aga
-                    System.out.println(" an bsagal p ");
-                    otherwriteSource.writeUTF(rr);
-                    
-                    str = otherreadSource.readUTF();
-                    System.out.println(str);
-                    /// b3d kida hwa ely mstani mani 2ktab 7aga
-                     rr = r.nextLine();
-                    otherwriteSource.writeUTF(rr); 
-                    str = otherreadSource.readUTF();
-                    System.out.println(str);
-                    /// b3d kida hwa ely mstani mani 2ktab 7aga
-                    rr = r.nextLine();
-                    otherwriteSource.writeUTF("rr");
-        
-                    str = otherreadSource.readUTF();
-                    System.out.println(str);
-        
-                        }
-			}
-			
-			// closing the scanner object
-			sc.close();
-		}
-		catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+      /// b3d kida hwa ely mstani mani 2ktab 7aga
+
+      dos.writeUTF("123");
+      // hyb3tol elrad 
+
+      str = dis.readUTF();
+
+      System.out.println(str);
+      return str;
+    } catch (IOException e) {
+      return ("Error: " + e);
+    }
+  }
 
 }
+
 
