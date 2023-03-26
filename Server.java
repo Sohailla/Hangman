@@ -85,7 +85,6 @@ public class Server {
             }
             if (!hangman.getAsterisk().contains("*")) {
               is.EditScore(username, 10);
-
               dos.writeUTF("Congrats!! You are win");
             }
           } else if (option.equals("2")) {

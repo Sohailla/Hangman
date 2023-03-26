@@ -11,10 +11,10 @@ public class impServer {
     try {
       FileWriter fileWriter = new FileWriter("playerInfo.txt", true);
       PrintWriter printWriter = new PrintWriter(fileWriter);
+      
       printWriter.println(username + " " + password + " " + nickname + " " + 0);
       printWriter.close();
-      
-      // success 
+
       return true;
     } catch (IOException e) {
       e.printStackTrace();
@@ -32,11 +32,7 @@ public class impServer {
         String[] info = line.split(" ");
         
         if (usernam.equals(info[0])) {
-          if (password.equals(info[1])) {
-            return "true";
-          } else {
-            return "false";
-          }
+          return (password.equals(info[1])) ? "true" : "false";
         } else {
           continue;
         }
