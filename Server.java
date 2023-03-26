@@ -4,137 +4,115 @@ import java.io.IOException;
 import java.net.Socket;
 
 public class Server {
-    protected Socket clientSocket;
-    public void setSocket(Socket socket) {
-        this.clientSocket = socket;
-	 }
-     public void execute (){
+  protected Socket clientSocket;
+  
+  public void setSocket(Socket socket) {
+    this.clientSocket = socket;
+  }
+
+  public void execute() {
+    try {
+      DataInputStream dis = new DataInputStream(clientSocket.getInputStream());
+      DataOutputStream dos = new DataOutputStream(clientSocket.getOutputStream());
+      impServer is = new impServer();
+      Hangman hangman = new Hangman();
       
-        try{
-        DataInputStream clientreadSource=null;
-        DataOutputStream   clientwriteSource= null;
-        impServer is = new impServer();
-        Hangman hangman=null;
+      dos.writeUTF(
+        "██╗  ██╗ █████╗ ███╗   ██╗ ██████╗ ███╗   ███╗ █████╗ ███╗   ██╗\n" +
+        "██║  ██║██╔══██╗████╗  ██║██╔════╝ ████╗ ████║██╔══██╗████╗  ██║\n" +
+        "███████║███████║██╔██╗ ██║██║  ███╗██╔████╔██║███████║██╔██╗ ██║\n" +
+        "██╔══██║██╔══██║██║╚██╗██║██║   ██║██║╚██╔╝██║██╔══██║██║╚██╗██║\n" +
+        "██║  ██║██║  ██║██║ ╚████║╚██████╔╝██║ ╚═╝ ██║██║  ██║██║ ╚████║\n" +
+        "╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝ ╚═════╝ ╚═╝     ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝\n"
+      );
 
-             clientreadSource = new DataInputStream(clientSocket.getInputStream());
-             clientwriteSource = new DataOutputStream(clientSocket.getOutputStream());
-             hangman=new Hangman();
-            clientwriteSource.writeUTF("1 For Login  ,  2 For Register");
-            // 2wal 7aga hyb3tha client 
-            String   str =clientreadSource.readUTF();
-            System.out.println("client said "+str);
-            int   ch1= Integer.parseInt(str);
-            boolean activation = false;
-            
+      dos.writeUTF("Enter Your Choice: \n");
+      dos.writeUTF("1. Login \n");
+      dos.writeUTF("2. Register \n");
 
-            switch (ch1)
-            {
-               case 1:
-               clientwriteSource.writeUTF("enter username : ");
-               String   username  =clientreadSource.readUTF();
-               System.out.println(username);
-               clientwriteSource.writeUTF("enter password : ");
-               String   pass  =clientreadSource.readUTF();
-               System.out.println(pass);
-               String onlin = is.login(username, pass);
-    
+      String str = dis.readUTF();
+      System.out.println("player choose: " + str);
+      int choice = Integer.parseInt(str);
+      boolean activation = false;
 
-               System.out.println(onlin);
-               clientwriteSource.writeUTF(onlin);
-               // game 
-               if(onlin.equals("true"))
-               {
-                   Player player = new Player();
-                 
-                   player.setActivation(1);
-                   player.setUsername(username);
-                   //OnlinePlayer.add(player);
-                   // 2wal 7aga htkatb fe egam
-                   clientwriteSource.writeUTF("1 to play individual   ,   2 to play in team");
-           // hyktam el player
-           String  option =clientreadSource.readUTF();
-            if (option.equals("1"))
-            
-            {
-                String guess=null;
-               while (hangman.getCount() < 6 &&  hangman.getAsterisk().contains("*")) 
-               {  
-       
-                   clientwriteSource.writeUTF("Guess any letter in the word ");
-                   clientwriteSource.writeUTF( hangman.getAsterisk());
-                   // server hy2ra
-                    guess =clientreadSource.readUTF();
-                   if (guess.equals("-"))
-                   break;
-                   hangman.hang(guess);
-                   clientwriteSource.writeUTF(String.valueOf(hangman.getCount()));
-                   String b = String.valueOf(hangman.getAsterisk().contains("*"));
-                   clientwriteSource.writeUTF(b);
-                  
+      switch (choice) {
+      case 1:
+        dos.writeUTF("Enter Username: ");
+        String username = dis.readUTF();
 
-               }
-               if(hangman.getCount()==6){
-                clientwriteSource.writeUTF("You have exceeded the number of attempts allowed");
+        dos.writeUTF("Enter Password: ");
+        String password = dis.readUTF();
+        
+        String onlin = is.login(username, password);
 
-               }
-               if(guess.equals("-"))
-               {
-                clientwriteSource.writeUTF("You left the game");
-               }
-               if( !hangman.getAsterisk().contains("*")){
-                is.EditScore(username, 10);
-                System.out.println(username);
-                clientwriteSource.writeUTF("You win");
-
-               }
-
-                 
-            }
-            else if (option.equals("2")){
-
-              /*   for (int i =0 ; i<  OnlinePlayer.size(); i++){
-                    System.out.println(" ely mawgod "+OnlinePlayer.get(i).getUsername());
-                    
-                }*/
-              
-            }
-              
-            else {
-               clientwriteSource.writeUTF("you enter wrong option");
-            }
-
-
-
-               }
-               break;
-
-               case 2:
-               clientwriteSource.writeUTF("enter username : ");
-               username  =clientreadSource.readUTF();
-
-               clientwriteSource.writeUTF("enter nickname : ");
-               String nickname  =clientreadSource.readUTF();
-               System.out.println(username);
-               clientwriteSource.writeUTF("enter password : ");
-               pass  =clientreadSource.readUTF();
-               System.out.println(pass);
-               String b = String.valueOf(  is.Register(username, nickname, pass));
-               clientwriteSource.writeUTF(b);
-               break;
-
-            }
-
-            
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-    
-    }
-
-     
-}
+        System.out.println(onlin);
+        dos.writeUTF(onlin);
         
 
+        if (onlin.equals("true")) {
+          Player player = new Player();
 
+          player.setActivation(1);
+          player.setUsername(username);
 
+          dos.writeUTF("1. individual \n");
+          dos.writeUTF("2. play in team");
+
+          String option = dis.readUTF();
+          if (option.equals("1"))
+
+          {
+            String guess = null;
+            while (hangman.getCount() < 6 && hangman.getAsterisk().contains("*")) {
+
+              dos.writeUTF("Guess any letter in the word ");
+              dos.writeUTF(hangman.getAsterisk());
+              // server hy2ra
+              guess = dis.readUTF();
+              if (guess.equals("-"))
+                break;
+              hangman.hang(guess);
+              dos.writeUTF(String.valueOf(hangman.getCount()));
+              String b = String.valueOf(hangman.getAsterisk().contains("*"));
+              dos.writeUTF(b);
+
+            }
+            if (hangman.getCount() == 6) {
+              dos.writeUTF("You have exceeded the number of attempts allowed");
+            }
+            if (guess.equals("-")) {
+              dos.writeUTF("You left the game");
+            }
+            if (!hangman.getAsterisk().contains("*")) {
+              is.EditScore(username, 10);
+
+              dos.writeUTF("Congrats!! You are win");
+            }
+          } else if (option.equals("2")) {
+            // TODO: ... 
+          } else {
+            dos.writeUTF("Are You Stupid or something??! Choose 1 OR 2");
+          }
+        }
+        break;
+
+      case 2:
+        dos.writeUTF("Enter username : ");
+        username = dis.readUTF();
+
+        dos.writeUTF("Enter nickname: ");
+        String nickname = dis.readUTF();
+
+        dos.writeUTF("Enter Password: ");
+        password = dis.readUTF();
+
+        String b = String.valueOf(is.Register(username, nickname, password));
+        dos.writeUTF(b);
+        break;
+
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+}

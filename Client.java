@@ -5,9 +5,10 @@ import java.util.*;
 class Client {
   public static void main(String[] args) {
     Scanner scan = new Scanner(System.in);
+    int PORT = 9999; 
     
     try {
-      Socket socket = new Socket("127.0.0.1", 9999);
+      Socket socket = new Socket("127.0.0.1", PORT);
       DataInputStream dis = new DataInputStream(socket.getInputStream());
       DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
 
@@ -56,25 +57,23 @@ class Client {
           case "2" : {
             Scanner cin = new Scanner(System.in);
             
-            System.out.println(" an bsagal u ");
+            System.out.println("Enter Username ");
             str = dis.readUTF();
             
             System.out.println(str);
             String rr = cin.nextLine();
             
-            /// b3d kida hwa ely mstani mani 2ktab 7aga
-            System.out.println(" an bsagal p ");
+            System.out.println("Enter Password ");
             dos.writeUTF(rr);
 
             str = dis.readUTF();
             System.out.println(str);
-            /// b3d kida hwa ely mstani mani 2ktab 7aga
+
             rr = cin.nextLine();
             dos.writeUTF(rr);
             str = dis.readUTF();
             System.out.println(str);
             
-            /// b3d kida hwa ely mstani mani 2ktab 7aga
             rr = cin.nextLine();
             dos.writeUTF("rr");
 
@@ -83,14 +82,7 @@ class Client {
           }
           break;
         }
-        
-        
-        if (option.equals("2")) {
-          
-
-        }
       }
-
       // closing the scanner object
       sc.close();
     } catch (IOException e) {
@@ -111,11 +103,7 @@ class Client {
       str = dis.readUTF();
       System.out.println(str);
 
-      /// b3d kida hwa ely mstani mani 2ktab 7aga
-
       dos.writeUTF("123");
-      // hyb3tol elrad 
-
       str = dis.readUTF();
 
       System.out.println(str);
@@ -124,7 +112,6 @@ class Client {
       return ("Error: " + e);
     }
   }
-
 }
 
 
