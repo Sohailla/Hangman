@@ -8,10 +8,10 @@ public class Hangman {
   private String word;
   private String asterisk;
   private int count = 0;
-  
-	public Hangman() {
+
+  public Hangman() {
     try {
-      File fileWriter = new File("words.txt");
+      File fileWriter = new File("game.txt");
       Scanner cin = new Scanner(fileWriter);
 
       String s;
@@ -27,7 +27,7 @@ public class Hangman {
       this.asterisk = new String(new char[word.length()]).replace("\0", "*");
 
     } catch (IOException e) {
-			e.printStackTrace();
+      e.printStackTrace();
     }
   }
 
@@ -42,9 +42,9 @@ public class Hangman {
   public void hang(String guess) {
     String newAsterisk = "";
     for (int i = 0; i < word.length(); i++) {
-			if (Character.toLowerCase(word.charAt(i)) == Character.toLowerCase(guess.charAt(0)) || 
-					Character.toUpperCase(word.charAt(i)) == Character.toUpperCase(guess.charAt(0))) {
-						newAsterisk += guess.charAt(0);
+      if (Character.toLowerCase(word.charAt(i)) == Character.toLowerCase(guess.charAt(0)) ||
+              Character.toUpperCase(word.charAt(i)) == Character.toUpperCase(guess.charAt(0))) {
+        newAsterisk += guess.charAt(0);
       } else if (asterisk.charAt(i) != '*') {
         newAsterisk += word.charAt(i);
       } else {
@@ -55,15 +55,15 @@ public class Hangman {
     if (asterisk.equals(newAsterisk)) {
       count++;
       hangmanMassages();
-    } else 
+    } else
       asterisk = newAsterisk;
-    
-    if (asterisk.equals(word)) 
+
+    if (asterisk.equals(word))
       System.out.println("Correct! You win! The word was " + word);
-    
+
   }
 
   public void hangmanMassages() {
-		System.out.println(count == 6 ? "Game Over!" : "Wrong, Try Again" );
+    System.out.println(count == 6 ? "Game Over!" : "Wrong, Try Again" );
   }
 }
